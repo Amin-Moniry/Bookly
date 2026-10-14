@@ -1,0 +1,26 @@
+{
+ "generation": 1,
+ "built_at": "2026-10-14T09:53:55+00:00",
+ "norm": "fa-norm-3",
+ "chunk": "fa-norm-3|ch-1|300/420/1|hdr1",
+ "embed": "none",
+ "dim": 0,
+ "sparse": false,
+ "n_rows": 2,
+ "bm25": {
+  "k1": 1.2,
+  "b": 0.75,
+  "method": "lucene",
+  "tok": "fa-tok-2",
+  "vocab": 217
+ },
+ "books": [
+  {
+   "key": "2196e22e4aedbb08",
+   "file": "sample-book.pdf",
+   "title": "sample-book",
+   "row0": 0,
+   "n": 2
+  }
+ ]
+}

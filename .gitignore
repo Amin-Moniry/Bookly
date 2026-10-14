@@ -1,0 +1,39 @@
+# Bookly / BookSearch-FA
+
+# virtualenv & caches
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+
+# IDE / editor / agent workspace
+.idea/
+.vscode/
+.freebuff/
+
+# secrets — NEVER commit
+# (llm_models.json may contain user-entered API keys from the model panel)
+llm_models.json
+.env
+.env.*
+*.key
+*.pem
+
+# heavy generated data & user files
+# tessdata: download fas+eng traineddata from tesseract-ocr/tessdata_best
+# index/ keeps ONLY the shipped demo sample (index/sample); user's own index is ignored
+index/*
+!index/sample/
+library/
+tessdata/
+
+# private eval data: your own questions quote YOUR books — never commit them
+eval/questions.jsonl
+eval/results.jsonl
+
+# logs & temp
+*.log
+*.tmp
+nohup.out
+*.pid

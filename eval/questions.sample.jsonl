@@ -1,0 +1,9 @@
+# eval/questions.sample.jsonl - sample format (contains NO real book content)
+# One JSON object per line; lines starting with # are comments (parser skips them).
+# Schema: {"id","question","slice","split","witnesses":[{"page","quote"}],"note"}
+# To build your own eval set: copy this file to eval/questions.jsonl (which is
+# git-ignored) and fill in real questions + quotes - never commit that file.
+{"id": "s001", "slice": "quote", "split": "dev", "question": "تفاوت لیست و تاپل در پایتون چیه؟", "witnesses": [{"page": 12, "quote": "در پایتون، لیست تغییرپذیر است اما تاپل تغییرناپذیر."}], "note": "sample only"}
+{"id": "s002", "slice": "quote", "split": "dev", "question": "How does python know which element comes first in a list?", "witnesses": [{"page": 34, "quote": "Python indexes list elements starting at zero."}], "note": "sample only"}
+{"id": "s003", "slice": "paraphrase", "split": "test", "question": "حلقهٔ برای در برنامه‌نویسی چه کاری می‌کند؟", "witnesses": [{"page": 57, "quote": "A loop executes a block of code repeatedly until its condition becomes false."}], "note": "sample only"}
+{"id": "s004", "slice": "none", "split": "test", "question": "بهترین روش دم کردن چای سبز چیه؟", "witnesses": [], "note": "sample only: no witness = expected answer is 'not found in the books'"}

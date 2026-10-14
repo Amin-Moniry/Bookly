@@ -1,0 +1,29 @@
+{
+ "key": "2196e22e4aedbb08",
+ "file": "sample-book.pdf",
+ "sha256": "2196e22e4aedbb08eb1eff1c767d1b8c3280d6da6b700b076f4fdeae83d27297",
+ "title": "sample-book",
+ "lang": "en",
+ "n_pages": 5,
+ "n_chunks": 2,
+ "label_source": "pdf_index",
+ "skipped_pages": 0,
+ "ocr_pages": [],
+ "stages": {
+  "extract": {
+   "version": "ex-2|fa-norm-3|ocr-tesseract|150c/0.6s/0.02b/0.3l",
+   "ocr_pages": [],
+   "seconds": 0.1
+  },
+  "chunk": {
+   "version": "fa-norm-3|ch-1|300/420/1|hdr1",
+   "seconds": 0.0
+  },
+  "embed": {
+   "version": "none",
+   "dim": 0,
+   "sparse": false,
+   "seconds": 0.0
+  }
+ }
+}

@@ -1,0 +1,70 @@
+# BookSearch-FA — stage 1 configuration (README §3.5)
+
+[paths]
+library = "library"
+index   = "index"
+
+[extract]                        # استخراج + quality gate + OCR (README §1.1، §13)
+ocr_engine = "tesseract"          # tesseract | none  (none = مثل قبل، فقط text layer)
+ocr_lang   = "fas+eng"
+ocr_dpi    = 300
+workers    = 6                    # 0/1 = سریال؛ N = یک پروسه در هر هسته (OCR موازی؛ 12 هسته داریم)
+force_ocr  = false                # OCR همهٔ صفحات (per-book: force_ocr/force_pages در library/books.toml)
+# tesseract_cmd = "C:/Program Files/Tesseract-OCR/tesseract.exe"   # اگر روی PATH نیست
+tessdata_prefix = "tessdata"      # traineddata پروژه (tessdata_best: fas+eng)
+gate = { min_chars = 150, min_script_ratio = 0.6, max_bad_ratio = 0.02, min_lex_hit = 0.3 }
+
+[chunk]
+target_tokens = 300
+max_tokens    = 420
+overlap_sentences = 1
+header = true                   # «عنوان کتاب › فصل» به ابتدای متنی که embed و BM25 می‌شود
+
+[embed]
+model      = "BAAI/bge-m3"
+backend    = "st"              # پیش‌فرض قابل‌حمل: sentence-transformers (سریع روی CPU) — بدون نیاز به FlagEmbedding
+                               # برای کیفیت بالاتر + جستجوی sparse سه‌لیسته: "m3" (نیاز به FlagEmbedding دارد؛
+                               # sync بعد از تغییر، کل کتابخانه را re-embed می‌کند — روی CPU برای هر تکه ~۷s)
+sparse     = true              # فقط با backend=m3: sparse.npz در کنار dense.npy ذخیره می‌شود
+device     = "auto"             # cuda اگر GPU داشته باشید، وگرنه cpu
+fp16       = true
+max_length = 512
+batch_size = 32
+num_threads = 12              # 0 = پیش‌فرض torch؛ با اندازه‌گیری تنظیم شود —
+                              # روی این دستگاه: 12→~258ms، 4→~268ms، 6(فیزیکی)→~355ms، پیش‌فرض 8→~315ms
+query_instruction = ""
+
+[bm25]
+k1 = 1.2
+b  = 0.75
+
+[search]
+depth          = 100            # کاندید از هر لیست
+rrf_k          = 60
+weights        = { bm25 = 1.0, dense = 1.0 }
+fusion         = "cc"           # cc (Convex Combination، برندهٔ eval روی dev) | rrf
+cc_alpha       = 0.5            # وزن dense در CC؛ روی dev α∈[0.4، 0.7] تقریباً تخت بود
+cc_beta        = 0.25           # وزن لیست سوم (sparse bge-m3)؛ فقط وقتی ایندکس sparse داشته باشد
+fused_top      = 30
+final_chunks   = 6
+neighbors      = 1              # تکهٔ قبل/بعد در همان بخش
+context_tokens = 3000
+min_dense_sim  = 0.5            # آستانهٔ «در کتاب‌ها نیست» برای dense؛ روی eval بی‌جواب تنظیم شود
+
+[rerank]                         # C2: rerank مرحلهٔ دوم (cross-encoder)
+enabled      = false             # پیش‌فرض: خاموش (پاسخ سریع). true = هر سؤال روی CPU ~۸s کندتر اما دقیق‌تر
+model        = "BAAI/bge-reranker-v2-m3"   # مدل کامل دانلود شده (HF cache)
+device       = "auto"            # روی این دستگاه CPU (torch CPU-only). با torch CUDA باز سرعت ~۲۰x می‌شود
+fp16         = true              # فقط روی GPU اثر دارد
+batch_size   = 8
+max_length   = 512
+normalize    = true
+
+[llm]                            # لایهٔ چت (booker.py) — هر API سازگار با OpenAI
+base_url = "https://api.xkiro.com/v1"
+api_key  = ""            # ئ هرگز کلید واقعی در ریپو نگذارید: از متغیر محیطی BOOKLY_API_KEY یا پنل مدل‌های UI استفاده کنید
+model    = "mistralai/mistral-large-2512"
+temperature = 0.2
+max_tokens  = 1200               # پاسخ‌های چندبخشی کامل جا شوند
+history_turns = 4                # چند جفت سؤال/جواب قبلی در چت بماند
+timeout_s   = 90

@@ -1,0 +1,22 @@
+# Bookly — runtime dependencies
+# (tested with: torch 2.x CPU/CUDA, transformers 5.x, Python 3.11+)
+pymupdf==1.28.2          # PDF text extraction
+pytesseract==0.3.13      # OCR fallback (needs the Tesseract binary installed)
+pillow==12.3.0
+bm25s==0.3.11            # BM25 retrieval
+scikit-learn==1.9.1
+numpy==2.5.3
+sentence-transformers==6.1.0
+transformers==5.18.0
+torch==2.14.1            # install the build matching your CUDA, if you have a GPU
+httpx==0.28.1            # LLM API client (streaming)
+pytest==9.1.1
+
+# optional — only for the higher-quality "m3" embed backend (booksearch.toml [embed].backend)
+FlagEmbedding==1.4.2
+accelerate==1.15.0
+
+# optional — model download speedup (large HF cache)
+huggingface_hub==1.33.0
+hf_transfer==0.1.9
+tqdm==4.70.1
